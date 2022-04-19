@@ -1,0 +1,53 @@
+---
+title: "Boone_consumer_complaints"
+author: "Anna Boone"
+date: "4/19/2022"
+output: 
+  flexdashboard::flex_dashboard:
+    vertical_layout: scroll
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(readxl)
+library(scales)
+library(lubridate)
+library(ggthemes)
+library(esquisse)
+library(flexdashboard)
+library(dplyr)
+library(ggplot2)
+```
+
+### Reading RDS data
+
+```{r}
+complaints <- readRDS("complaints.rds")
+```
+
+### Chart 1
+    
+```{r}
+
+ggplot(complaintsby_date, aes(x= date_received, y= n)) +
+geom_line()+
+  geom_point()
+
+```
+    
+### Chart 2
+
+```{r}
+
+```
+
+### Chart 3
+
+```{r}
+
+```
