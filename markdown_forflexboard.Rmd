@@ -22,6 +22,11 @@ library(esquisse)
 library(flexdashboard)
 library(dplyr)
 library(ggplot2)
+library(scales)
+library(sf)
+library(viridis)
+library(tmap)
+
 ```
 
 ### Reading RDS data
@@ -36,18 +41,38 @@ complaints <- readRDS("complaints.rds")
 
 ggplot(complaintsby_date, aes(x= date_received, y= n)) +
 geom_line()+
-  geom_point()
+  geom_point()+
+  labs(main= "Complaints by Date Received", x= "Date Received", y= "Number of Complaints")
 
 ```
     
 ### Chart 2
 
 ```{r}
+ggplot(complaintsby_product, aes(x = product, y = n)) +
+  geom_col(position = "stack") +
+  scale_y_continuous(label=comma)+
+  coord_flip()+
+  labs(title = 'Complaints by Product',) +
+  theme_classic() +
+  xlab('Product Type') +
+  ylab('Number of Complaints') +
+  theme(axis.text.x = 
+          element_text(angle = 90, hjust = 1, vjust = 0.5))
 
 ```
 
 ### Chart 3
 
 ```{r}
+ggplot(complaintsby_state, aes(x = state, y = n)) +
+  geom_col(position = "stack") +
+  scale_y_continuous(label=comma)+
+  labs(title = 'Complaints by State',) +
+  theme_classic() +
+  xlab('State') +
+  ylab('Number of Complaints') +
+  theme(axis.text.x = 
+          element_text(angle = 90, hjust = 1, vjust = 0.5))
 
 ```

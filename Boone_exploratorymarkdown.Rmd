@@ -1,0 +1,45 @@
+---
+title: "Boone_initial_analysis"
+author: "Anna Boone"
+date: "4/19/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(readxl)
+library(scales)
+library(lubridate)
+library(ggthemes)
+library(esquisse)
+library(flexdashboard)
+library(dplyr)
+
+```
+
+```{r}
+complaints <- readRDS("complaints.rds")
+```
+
+### Ordering complains in ascending order by date. 
+
+```{r}
+complaintsby_date <- complaints %>% 
+  count(date_received)
+```
+
+```{r}
+complaintsby_product <- complaints %>% 
+  count(product)
+```
+
+```{r}
+complaintsby_state <- complaints %>% 
+  count(state)
+```
+
