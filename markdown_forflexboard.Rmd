@@ -4,7 +4,7 @@ author: "Anna Boone"
 date: "4/19/2022"
 output: 
   flexdashboard::flex_dashboard:
-    vertical_layout: fill
+    vertical_layout: scroll
 ---
 
 ```{r setup, include=FALSE}
