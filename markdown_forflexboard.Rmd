@@ -1,14 +1,14 @@
 ---
-title: "Consumemr Complaints Data"
+title: "Consumer Complaints Data"
 author: "Anna Boone"
 date: "4/19/2022"
 output: 
   flexdashboard::flex_dashboard:
-    vertical_layout: scroll
+    vertical_layout: fill
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r}
@@ -26,10 +26,7 @@ library(scales)
 library(sf)
 library(viridis)
 library(tmap)
-
 ```
-
-### Data Organization
 
 ```{r}
 complaints <- readRDS("complaints.rds")
@@ -37,34 +34,48 @@ complaints <- readRDS("complaints.rds")
 
 ```{r}
 complaintsby_date <- complaints %>% 
-  count(date_received)
+  mutate(date_week = week(date_received)) %>% 
+  count(date_week) %>% 
+  filter(date_week != 9,
+  date_week != 53)
+  
 ```
 
 ```{r}
 complaintsby_product <- complaints %>% 
-  count(product)
+  count(product) %>% 
+  mutate(product = str_replace(product, "Checking or savings account", "Accounts"),
+         product = str_replace(product, "Credit card or prepaid card", "Cards"),
+         product = str_replace(product, "Credit reporting, credit repair services, or other personal consumer reports", "Credit"),
+         product = str_replace(product, "Debt collection", "Debt"),
+         product = str_replace(product, "Money transfer, virtual currency, or money service", "Currency"),
+         product = str_replace(product, "Payday loan, title loan, or personal loan", "Loans"),
+         product = str_replace(product, "Student loan", "Student Loans"),
+         product = str_replace(product, "Vehicle loan or lease", "Vehicle Loans"))
+  
 ```
 
 ```{r}
 complaintsby_state <- complaints %>% 
-  count(state)
+  count(state) %>% 
+  mutate(state = str_replace(state, "UNITED STATES MINOR OUTLYING ISLANDS", "UM")) 
 ```
 
 ### Complaints by Date Received
 
 ```{r}
 
-ggplot(complaintsby_date, aes(x= date_received, y= n)) +
+ggplot(complaintsby_date, aes(x= date_week, y= n)) +
 geom_line()+
   geom_point()+
-  labs(title = "Complaints by Date Received", x= "Date Received", y= "Number of Complaints")
+  labs(title = "Complaints by Date Received", x= "Week of Year", y= "Number of Complaints")
 
 ```
 
 ### Complaints by Product
 
 ```{r}
-ggplot(complaintsby_product, aes(x = product, y = n)) +
+ggplot(complaintsby_product, aes(x = reorder(product, -n), y = n)) +
   geom_col(position = "stack") +
   scale_y_continuous(label=comma)+
   coord_flip()+
@@ -80,7 +91,7 @@ ggplot(complaintsby_product, aes(x = product, y = n)) +
 ### Complaints by State
 
 ```{r}
-ggplot(complaintsby_state, aes(x = state, y = n)) +
+ggplot(complaintsby_state, aes(x = reorder(state,-n), y = n)) +
   geom_col(position = "stack") +
   scale_y_continuous(label=comma)+
   labs(title = 'Complaints by State',) +
