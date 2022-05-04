@@ -1,5 +1,5 @@
 ---
-title: "Boone_consumer_complaints"
+title: "Consumemr Complaints Data"
 author: "Anna Boone"
 date: "4/19/2022"
 output: 
@@ -29,24 +29,39 @@ library(tmap)
 
 ```
 
-### Reading RDS data
+### Data Organization
 
 ```{r}
 complaints <- readRDS("complaints.rds")
 ```
 
-### Chart 1
-    
+```{r}
+complaintsby_date <- complaints %>% 
+  count(date_received)
+```
+
+```{r}
+complaintsby_product <- complaints %>% 
+  count(product)
+```
+
+```{r}
+complaintsby_state <- complaints %>% 
+  count(state)
+```
+
+### Complaints by Date Received
+
 ```{r}
 
 ggplot(complaintsby_date, aes(x= date_received, y= n)) +
 geom_line()+
   geom_point()+
-  labs(main= "Complaints by Date Received", x= "Date Received", y= "Number of Complaints")
+  labs(title = "Complaints by Date Received", x= "Date Received", y= "Number of Complaints")
 
 ```
-    
-### Chart 2
+
+### Complaints by Product
 
 ```{r}
 ggplot(complaintsby_product, aes(x = product, y = n)) +
@@ -62,7 +77,7 @@ ggplot(complaintsby_product, aes(x = product, y = n)) +
 
 ```
 
-### Chart 3
+### Complaints by State
 
 ```{r}
 ggplot(complaintsby_state, aes(x = state, y = n)) +
@@ -74,5 +89,4 @@ ggplot(complaintsby_state, aes(x = state, y = n)) +
   ylab('Number of Complaints') +
   theme(axis.text.x = 
           element_text(angle = 90, hjust = 1, vjust = 0.5))
-
 ```
