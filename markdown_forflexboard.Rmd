@@ -61,21 +61,6 @@ complaintsby_state <- complaints %>%
   mutate(state = str_replace(state, "UNITED STATES MINOR OUTLYING ISLANDS", "UM")) 
 ```
 
-```{r}
-company_response <- complaints %>% 
-  count(company_response_to_consumer) %>% 
-  company_response = company_response[-1,] %>% 
-  rename(company_response, "Response Type" = "company_response_to_consumer") 
-
-```
-
-```{r}
-consumer_consent <- complaints %>% 
-  count(consumer_consent_provided) %>% 
-  consumer_consent = consumer_consent[-1,] %>% 
-  rename(consumer_consent, "Consent Status"= "consumer_consent_provided")
-```
-
 ### Complaints by Date Received
 
 ```{r}
@@ -115,6 +100,26 @@ ggplot(complaintsby_state, aes(x = reorder(state,-n), y = n)) +
           element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
 
-\newpage
+\pagebreak
 
-#About Complaints Data The data used
+###Company Response/ Consumer Consent
+
+```{r}
+complaints %>% 
+  count(consumer_consent_provided)
+```
+
+```{r}
+complaints %>% 
+  count(company_response_to_consumer)
+```
+
+\pagebreak
+
+#About Complaints Data
+
+The data used in this analysis comes from the Consumer Financial Protect Bureau, a U.S. government agency that regulates banks, lenders, and other financial companies on behalf of consumers.
+
+The database which updates daily, according to the CFPB website.The data consists of only complaints sent to companies for response, after they are responded to. It is also important to note that this database is not "a statistical sample of consumers' experiences in the marketplace and these complaints are not necessarily representative of all consumers' experiences with a financial product or company," according to the CFPB website.
+
+For my analysis, I processed data on the states from which complaints were received, types of financial products which consumers made complaints about and the time (by week of year) which the complaints were received by companies. I also paired down data to look at the response types from companies and what type, if any, of consent was given by customers for their complaint narrative to be published.
