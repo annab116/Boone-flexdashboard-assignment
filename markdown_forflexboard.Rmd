@@ -61,22 +61,35 @@ complaintsby_state <- complaints %>%
   mutate(state = str_replace(state, "UNITED STATES MINOR OUTLYING ISLANDS", "UM")) 
 ```
 
+```{r}
+company_response <- complaints %>% 
+  count(company_response_to_consumer) %>% 
+  company_response = company_response[-1,] %>% 
+  rename(company_response, "Response Type" = "company_response_to_consumer") 
+
+```
+
+```{r}
+consumer_consent <- complaints %>% 
+  count(consumer_consent_provided) %>% 
+  consumer_consent = consumer_consent[-1,] %>% 
+  rename(consumer_consent, "Consent Status"= "consumer_consent_provided")
+```
+
 ### Complaints by Date Received
 
 ```{r}
-
 ggplot(complaintsby_date, aes(x= date_week, y= n)) +
-geom_line()+
+geom_line(color = "red")+
   geom_point()+
-  labs(title = "Complaints by Date Received", x= "Week of Year", y= "Number of Complaints")
-
+  labs(title = "Complaints by Date Received", x= "Week of Year", y= "Number of Complaints") 
 ```
 
 ### Complaints by Product
 
 ```{r}
 ggplot(complaintsby_product, aes(x = reorder(product, -n), y = n)) +
-  geom_col(position = "stack") +
+  geom_col(position = "stack", color = "black", fill = "red") +
   scale_y_continuous(label=comma)+
   coord_flip()+
   labs(title = 'Complaints by Product',) +
@@ -92,7 +105,7 @@ ggplot(complaintsby_product, aes(x = reorder(product, -n), y = n)) +
 
 ```{r}
 ggplot(complaintsby_state, aes(x = reorder(state,-n), y = n)) +
-  geom_col(position = "stack") +
+  geom_col(position = "stack", color = "black", fill = "red") +
   scale_y_continuous(label=comma)+
   labs(title = 'Complaints by State',) +
   theme_classic() +
@@ -101,3 +114,7 @@ ggplot(complaintsby_state, aes(x = reorder(state,-n), y = n)) +
   theme(axis.text.x = 
           element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
+
+\newpage
+
+#About Complaints Data The data used
